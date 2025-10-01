@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>کوییز فارسی</title>
+<style>
+body{font-family:tahoma,Arial; background:#f6f6f6; margin:0; padding:20px; display:flex; align-items:center; justify-content:center; min-height:100vh}
+.container{width:100%; max-width:480px; background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 18px rgba(0,0,0,0.08); text-align:center}
+h1{margin:0 0 10px}
+#question{font-size:18px; margin:20px 0}
+.options button{display:block; width:100%; margin:8px 0; padding:12px; border-radius:8px; border:1px solid #ddd; background:#fafafa; cursor:pointer}
+.progress{font-size:14px; color:#666}
+.result{font-size:18px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>کوییز فارسی</h1>
+<div id="start-screen">
+<button id="startBtn">شروع کوییز</button>
+</div>
+
+<div id="quiz-screen" style="display:none">
+<p class="progress" id="progress"></p>
+<h2 id="question"></h2>
+<div class="options" id="options"></div>
+</div>
+
+<div id="end-screen" style="display:none">
+<p class="result" id="result"></p>
+<button id="restartBtn">شروع دوباره</button>
+</div>
+</div>
+
+<script>
+const questions = [
+{q:"پایتخت ایران؟", options:["تهران","مشهد","اصفهان","شیراز"], a:0},
+{q:"عدد تقریبی پی (π)؟", options:["2.14","3.14","4.14","1.41"], a:1},
+{q:"زبان رسمی ایران؟", options:["عربی","فارسی","انگلیسی","ترکی"], a:1},
+{q:"رنگ‌های پرچم ایران؟", options:["سبز-سفید-قرمز","آبی","زرد","مشکی"], a:0},
+{q:"فاصله تقریبی زمین تا خورشید؟", options:["150 میلیون کیلومتر","1 میلیون کیلومتر","1 میلیارد کیلومتر","10 هزار کیلومتر"], a:0}
+];
+
+let idx=0, score=0;
+
+const startBtn=document.getElementById('startBtn');
+const restartBtn=document.getElementById('restartBtn');
+const startScreen=document.getElementById('start-screen');
+const quizScreen=document.getElementById('quiz-screen');
+const endScreen=document.getElementById('end-screen');
+const questionEl=document.getElementById('question');
+const optionsEl=document.getElementById('options');
+const progressEl=document.getElementById('progress');
+const resultEl=document.getElementById('result');
+
+function showQuestion(){
+if(idx>=questions.length){ endQuiz(); return; }
+progressEl.innerText = `سوال ${idx+1} از ${questions.length}`;
+questionEl.innerText = questions[idx].q;
+optionsEl.innerHTML = '';
+questions[idx].options.forEach((opt,i)=>{
+  const b=document.createElement('button');
+  b.innerText = opt;
+  b.onclick = ()=>{ if(i===questions[idx].a) score++; idx++; showQuestion(); }
+  optionsEl.appendChild(b);
+});
+}
+
+function endQuiz(){
+quizScreen.style.display='none';
+endScreen.style.display='block';
+resultEl.innerText = `امتیاز شما: ${score} از ${questions.length}`;
+}
+
+startBtn.onclick = ()=>{
+startScreen.style.display='none';
+quizScreen.style.display='block';
+idx=0; score=0;
+showQuestion();
+};
+
+restartBtn.onclick = ()=>{
+endScreen.style.display='none';
+startScreen.style.display='block';
+};
+
+</script>
+</body>
+</html>
